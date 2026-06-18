@@ -1,0 +1,29 @@
+import { useEffect } from 'react';
+import { Alert, Box, CircularProgress, Container, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../store';
+import { fetchAbout } from '../store/appSlice';
+
+export default function Home() {
+  const dispatch = useAppDispatch();
+  const { message, loading, error } = useAppSelector((state) => state.app);
+
+  useEffect(() => {
+    dispatch(fetchAbout());
+  }, [dispatch]);
+
+  return (
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Template App
+      </Typography>
+      {loading && (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <CircularProgress size={20} />
+          <Typography>Loading...</Typography>
+        </Box>
+      )}
+      {error && <Alert severity="error">Error: {error}</Alert>}
+      {message && <Alert severity="success">API says: {message}</Alert>}
+    </Container>
+  );
+}
